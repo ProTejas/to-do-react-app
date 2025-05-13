@@ -1,20 +1,8 @@
 const express = require('express');
-const mongoose = require('mongoose');
-
-const app = express();
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-//Mongo Connect
-mongoose.connect('mongodb://127.0.0.1:27017/to-do-app')
-    .then(() => console.log('mongo db connected'))
-    .catch((err) => console.log('Monog Error', err));
-
-
+const router = express.Router();
 
 // ✅ POST route to create a new user
-app.post('/api/users', async (req, res) => {
+router.post('/api/users', async (req, res) => {
     try {
         const { name, mobile, email, password } = req.body;
 
@@ -40,21 +28,18 @@ app.post('/api/users', async (req, res) => {
     }
 });
 
-app.get('/api/users', async (req, res) => {
+router.get('/api/users', async (req, res) => {
     const allUsers = await User.find({});
     return res.status(200).send(allUsers);
 
 });
 
-app.get('/api/users/:id', async (req, res) => {
+router.get('/api/users/:id', async (req, res) => {
     const user = await User.findById(req.params.id);
     console.log(req.params.email);
-    
+
     return res.status(200).send(user);
 
 });
 
-app.listen('8000', () => console.log('server connected'));
-
-
-
+module.exports = router;

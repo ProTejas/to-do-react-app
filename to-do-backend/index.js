@@ -1,60 +1,22 @@
 const express = require('express');
-const mongoose = require('mongoose');
+const { connectMongoDb } = require('./connection');
+const { logReqRes } = require('./middlewares');
+const userRouter = require('./routes/usersRoute');
 
 const app = express();
 
+// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(logReqRes('log.txt'));
 
-//Mongo Connect
-mongoose.connect('mongodb://127.0.0.1:27017/to-do-app')
-    .then(() => console.log('mongo db connected'))
-    .catch((err) => console.log('Monog Error', err));
+// Routes
+app.use('/api/users', userRouter);
 
+// MongoDB Connection
+connectMongoDb('mongodb://127.0.0.1:27017/to-do-app')
+  .then(() => console.log('MongoDB connected'))
+  .catch((err) => console.error('MongoDB connection error:', err));
 
-
-// ✅ POST route to create a new user
-app.post('/api/users', async (req, res) => {
-    try {
-        const { name, mobile, email, password } = req.body;
-
-        // ✅ Validation
-        if (!name || !mobile || !email || !password) {
-            return res.status(400).json({ msg: "All fields are required" });
-        }
-
-        // ✅ Create User
-        const userData = await User.create({
-            fullName: name,
-            mobileNumber: mobile,
-            email: email,
-            password: password
-        });
-
-        console.log("User inserted:", userData);
-
-        return res.status(201).json({ msg: "User created successfully", user: userData });
-    } catch (error) {
-        console.error("Error inserting user:", error);
-        return res.status(500).json({ msg: "Server error", error: error.message });
-    }
-});
-
-app.get('/api/users', async (req, res) => {
-    const allUsers = await User.find({});
-    return res.status(200).send(allUsers);
-
-});
-
-app.get('/api/users/:id', async (req, res) => {
-    const user = await User.findById(req.params.id);
-    console.log(req.params.email);
-    
-    return res.status(200).send(user);
-
-});
-
-app.listen('8000', () => console.log('server connected'));
-
-
-
+// Start server
+app.listen(8000, () => console.log('Server connected on port 8000'));

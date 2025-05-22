@@ -1,0 +1,16 @@
+{
+  "name": "to-do-backend",
+  "version": "1.0.0",
+  "description": "To connect backend to mongodb",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0",
+    "mongoose": "^8.14.2"
+  }
+}

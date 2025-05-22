@@ -42,4 +42,52 @@ async function createNewUser(req, res) {
     }
 }
 
-module.exports = { handleGetAllUsers, createNewUser };
+async function authanticateUser(req, res) {
+    try {
+        const { email, password } = req.body;
+
+        // Validation
+        if (!email || !password) {
+            return res.status(400).json({ msg: "email required and password required" });
+        }
+
+        // Create user
+        const userData = await User.find({
+            email: email,
+            password: password
+        });
+
+        console.log("User inserted:", userData);
+
+        return res.status(200).json({ msg: "User Authenticate Successfully", user: userData });
+    } catch (error) {
+        console.error("Error inserting user:", error);
+        return res.status(500).json({ msg: "Server error", error: error.message });
+    }
+}
+
+async function updateTask(req, res) {
+    try {
+        const { email } = req.body;
+
+        // Validation
+        if (!email) {
+            return res.status(400).json({ msg: "email required" });
+        }
+
+        // Create user
+        const userData = await User.create({
+            email: email,
+            password: password
+        });
+
+        console.log("User inserted:", userData);
+
+        return res.status(201).json({ msg: "User created successfully", user: userData });
+    } catch (error) {
+        console.error("Error inserting user:", error);
+        return res.status(500).json({ msg: "Server error", error: error.message });
+    }
+}
+
+module.exports = { handleGetAllUsers, createNewUser, authanticateUser };

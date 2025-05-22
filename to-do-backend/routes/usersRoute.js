@@ -1,13 +1,17 @@
 const express = require('express');
-const { handleGetAllUsers, createNewUser } = require('../controllers/user');
+const { handleGetAllUsers, createNewUser, authanticateUser } = require('../controllers/user');
 const User = require('../models/users');
 const router = express.Router();
+
+//Log IN
+router.post('/login', authanticateUser);
 
 // Create a new user
 router.post('/', createNewUser);
 
+
 // Get all users
-router.get('/', handleGetAllUsers);
+router.get('', handleGetAllUsers);
 
 // Get user by ID
 router.get('/:id', async (req, res) => {

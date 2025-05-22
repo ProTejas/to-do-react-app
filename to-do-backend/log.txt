@@ -14,3 +14,19 @@
 1747509667135: ::ffff:127.0.0.1 GET /api/users
 
 1747509689579: ::ffff:127.0.0.1 POST /api/users
+
+1747936427018: ::ffff:127.0.0.1 GET /api/users
+
+1747936685616: ::ffff:127.0.0.1 POST /api/loging
+
+1747936750598: ::ffff:127.0.0.1 POST /api/loging
+
+1747936751201: ::ffff:127.0.0.1 POST /api/loging
+
+1747937223316: ::ffff:127.0.0.1 POST //api/users/login
+
+1747937223974: ::ffff:127.0.0.1 POST //api/users/login
+
+1747937224375: ::ffff:127.0.0.1 POST //api/users/login
+
+1747937281422: ::ffff:127.0.0.1 POST /api/users/login

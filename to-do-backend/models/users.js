@@ -18,7 +18,12 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-    }
+    },
+    tasks: [{
+        title: { type: String, required: true },
+        status: { type: String, default: "pending" },
+        createdAt: { type: Date, default: Date.now }
+    }]
 });
 
 //Model 

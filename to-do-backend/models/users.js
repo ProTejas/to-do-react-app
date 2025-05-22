@@ -21,8 +21,7 @@ const userSchema = new mongoose.Schema({
     },
     tasks: [{
         title: { type: String, required: true },
-        status: { type: String, default: "pending" },
-        createdAt: { type: Date, default: Date.now }
+        status: { type: String, default: "pending" }
     }]
 });
 

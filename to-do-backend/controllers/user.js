@@ -59,7 +59,7 @@ async function authanticateUser(req, res) {
 
         console.log("User inserted:", userData);
 
-        return res.status(200).json({ msg: "User Authenticate Successfully", user: userData });
+        return res.status(200).json({ msg: "User Authenticate Successfully", user: email, tasks: userData[0].tasks });
     } catch (error) {
         console.error("Error inserting user:", error);
         return res.status(500).json({ msg: "Server error", error: error.message });
@@ -68,26 +68,32 @@ async function authanticateUser(req, res) {
 
 async function updateTask(req, res) {
     try {
-        const { email } = req.body;
+        const { email, tasks } = req.body;
 
         // Validation
-        if (!email) {
-            return res.status(400).json({ msg: "email required" });
+        if (!email || !tasks) {
+            return res.status(400).json({ msg: "Email and tasks are required" });
         }
 
-        // Create user
-        const userData = await User.create({
-            email: email,
-            password: password
-        });
+        // Find the user by email and update tasks
+        const updatedUser = await User.findOneAndUpdate(
+            { email: email },
+            { $push: { tasks: { $each: tasks } } }
+        );
+        ;
 
-        console.log("User inserted:", userData);
+        if (!updatedUser) {
+            return res.status(404).json({ msg: "User not found" });
+        }
 
-        return res.status(201).json({ msg: "User created successfully", user: userData });
+        console.log("User updated:", updatedUser);
+
+        return res.status(200).json({ msg: "User tasks updated", user: updatedUser });
     } catch (error) {
-        console.error("Error inserting user:", error);
+        console.error("Error updating user:", error);
         return res.status(500).json({ msg: "Server error", error: error.message });
     }
 }
 
-module.exports = { handleGetAllUsers, createNewUser, authanticateUser };
+
+module.exports = { handleGetAllUsers, createNewUser, authanticateUser, updateTask };

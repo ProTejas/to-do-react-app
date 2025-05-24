@@ -122,3 +122,37 @@
 1748069766772: ::1 OPTIONS /api/users
 
 1748069979749: ::1 POST /api/users
+
+1748098727010: ::ffff:127.0.0.1 GET /api/users/login
+
+1748098728430: ::ffff:127.0.0.1 GET /api/users/login
+
+1748098736848: ::ffff:127.0.0.1 POST /api/users/login
+
+1748098763401: ::1 POST /api/users/login
+
+1748101179616: ::1 POST /api/users/login
+
+1748101193637: ::1 POST /api/users/login
+
+1748102180043: ::ffff:127.0.0.1 POST /api/users
+
+1748102327568: ::1 POST /api/users
+
+1748102359176: ::1 POST /api/users
+
+1748102448166: ::1 POST /api/users
+
+1748102465824: ::1 POST /api/users
+
+1748103170598: ::1 POST /api/users
+
+1748103210040: ::1 POST /api/users
+
+1748103236752: ::1 POST /api/users
+
+1748103242491: ::1 POST /api/users
+
+1748103422420: ::1 POST /api/users
+
+1748103451766: ::1 POST /api/users/login

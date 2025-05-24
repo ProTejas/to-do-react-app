@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { data, Link } from 'react-router-dom'; // FIX: should be from 'react-router-dom'
+import { data, Link, useNavigate } from 'react-router-dom'; // FIX: should be from 'react-router-dom';
 
 import { FcGoogle } from "react-icons/fc";
 // import ragistrationImg from '../../assets/ragistration-img.jpg';
@@ -20,6 +20,7 @@ function SignUp() {
         password: false,
     });
 
+    const [existOrNot, setExistenace] = useState(false);
 
     const [regexValidation, setRegexValidation] = useState({
         name: true,
@@ -67,6 +68,8 @@ function SignUp() {
         }
     }
 
+    const navigate = useNavigate();
+
     async function handleClick(e) {
         e.preventDefault(); // prevent page reload
 
@@ -83,9 +86,15 @@ function SignUp() {
 
             if (response.ok) {
                 console.log('Registration successful:', data);
+                navigate('/log-in')
                 // redirect or show success message here
             } else {
-                console.log('Server error:', data.message || 'Something went wrong');
+                console.log('Server error:', data.msg || 'Something went wrong');
+                if (data.msg == "Email already exists") {
+                    console.log("true");
+
+                    setExistenace(true);
+                }
             }
 
         } catch (err) {
@@ -124,6 +133,7 @@ function SignUp() {
                         <input type="email" id='email' name='email' value={validation.email} onChange={handleChange} className='w-96 border-2 rounded-md border-gray-300 p-1 pl-2' />
                         {touched.email && validation.email.trim() === '' && <p className='text-sm mt-1 text-red-500'>Field required</p>}
                         {touched.email && validation.email.trim() !== '' && !regexValidation.email && <p className='text-sm mt-1 text-red-500'>Enter a valid email</p>}
+                        {existOrNot && <p className='text-sm mt-1 text-red-500'>Email Already exist</p>}
 
                         {/* Password */}
                         <label htmlFor="password" className='font-semibold text-sm mt-2.5'>Password*</label>

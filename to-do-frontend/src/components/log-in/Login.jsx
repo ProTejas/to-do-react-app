@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 
 function Login() {
     const [validation, setValidation] = useState({
@@ -17,6 +17,8 @@ function Login() {
         email: true,
         password: true,
     });
+
+    const navigate = useNavigate();
 
     function handleChange(e) {
         const { name, value } = e.target;
@@ -41,12 +43,38 @@ function Login() {
          } */
     }
 
+    async function handleClick(e) {
+        e.preventDefault(); // prevent page reload
+
+        try {
+            const response = await fetch('http://localhost:8000/api/users/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(validation)
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                console.log('Registration successful:', data);
+                navigate('/users-todos');
+                // redirect or show success message here
+            } else {
+                console.log('Server error:', data.message || 'Something went wrong');
+            }
+
+        } catch (err) {
+            console.log('Error:', err);
+        }
+    }
     return (
         <div className='h-[100vh] flex justify-center items-center'>
             <div className="form-div flex justify-center p-5 w-[50vw] bg-white rounded-md shadow">
                 <div className='form-container'>
                     <h1 className='font-bold text-3xl'>Log in</h1>
-                    <form className='flex flex-col mt-4'>
+                    <form className='flex flex-col mt-4' onSubmit={handleClick}>
                         {/* Email */}
                         <label htmlFor="email" className='font-semibold text-sm mt-2.5'>Email*</label>
                         <input type="email" id='email' name='email' value={validation.email} onChange={handleChange} className='w-96 border-2 rounded-md border-gray-300 p-1 pl-2' />
@@ -64,7 +92,7 @@ function Login() {
                     <div className='text-center w-96 mt-2.5'>
                         <p className='text-gray-400 text-sm'>
                             Don't have account
-                            <span className='text-black'> <Link to='/sign-up'>Sign Uo</Link></span>
+                            <span className='text-black'> <Link to='/sign-up'>Sign Up</Link></span>
                         </p>
                     </div>
                 </div>

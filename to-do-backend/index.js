@@ -1,9 +1,13 @@
 const express = require('express');
+const cors = require('cors');
 const { connectMongoDb } = require('./connection');
 const { logReqRes } = require('./middlewares');
 const userRouter = require('./routes/usersRoute');
 
 const app = express();
+
+// Enable CORS for all routes
+app.use(cors());
 
 // Middleware
 app.use(express.json());

@@ -108,3 +108,17 @@
 1747940949963: ::ffff:127.0.0.1 PATCH /api/users/updateTasks
 
 1747940956804: ::ffff:127.0.0.1 GET /api/users/
+
+1748069592554: ::1 OPTIONS /api/users/register
+
+1748069667612: ::1 OPTIONS /api/users/register
+
+1748069683660: ::1 OPTIONS /api/users/register
+
+1748069739820: ::1 OPTIONS /api/users
+
+1748069744660: ::1 OPTIONS /api/users
+
+1748069766772: ::1 OPTIONS /api/users
+
+1748069979749: ::1 POST /api/users

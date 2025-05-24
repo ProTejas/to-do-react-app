@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; // FIX: should be from 'react-router-dom'
+import { data, Link } from 'react-router-dom'; // FIX: should be from 'react-router-dom'
 
 import { FcGoogle } from "react-icons/fc";
 // import ragistrationImg from '../../assets/ragistration-img.jpg';
@@ -67,6 +67,32 @@ function SignUp() {
         }
     }
 
+    async function handleClick(e) {
+        e.preventDefault(); // prevent page reload
+
+        try {
+            const response = await fetch('http://localhost:8000/api/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(validation)
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                console.log('Registration successful:', data);
+                // redirect or show success message here
+            } else {
+                console.log('Server error:', data.message || 'Something went wrong');
+            }
+
+        } catch (err) {
+            console.log('Error:', err);
+        }
+    }
+
     return (
         <div className='h-[100vh] flex justify-center items-center'>
             <div className="form-div flex justify-center p-5 w-[50vw] bg-white rounded-md shadow">
@@ -80,7 +106,7 @@ function SignUp() {
                         </div>
                     </div>
 
-                    <form className='flex flex-col mt-4'>
+                    <form className='flex flex-col mt-4' onSubmit={handleClick}>
                         {/* Name */}
                         <label htmlFor="name" className='font-semibold text-sm mt-2.5'>Name*</label>
                         <input type="text" id='name' name='name' value={validation.name} onChange={handleChange} className='w-96 border-2 rounded-md border-gray-300 p-1 pl-2' />

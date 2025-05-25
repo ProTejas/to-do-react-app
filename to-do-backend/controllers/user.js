@@ -20,7 +20,7 @@ async function createNewUser(req, res) {
         }
 
         // Check for duplicate email
-        const existingUser = await User.findOne({ email });
+        const existingUser = await User.findOne({ email, mobile });
         if (existingUser) {
             return res.status(409).json({ msg: "Email already exists" });
         }

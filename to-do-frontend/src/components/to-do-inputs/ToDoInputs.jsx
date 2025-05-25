@@ -26,7 +26,7 @@ function ToDoInputs() {
       <div className="container">
         <label htmlFor="tasks">Tasks</label>
         <input type="text" className='w-full border' id='tasks' name='tasks' value={tasks} onChange={onChange} />
-        <button onClick={addTaskBtn} className='p-2 bg-black'>Add Task</button>
+        <button onClick={addTaskBtn} className='p-2 bg-black text-white'>Add Task</button>
       </div>
       <div className="tasks-list-box">
         <ul>

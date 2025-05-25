@@ -105,46 +105,45 @@ function SignUp() {
     return (
         <div className='h-[100vh] flex justify-center items-center'>
             <div className="form-div flex justify-center p-5 w-[50vw] bg-white rounded-md shadow">
-                <div className='form-container'>
+                <div className='form-container w-full'>
                     <h1 className='font-bold text-3xl'>Create account</h1>
                     <p className='text-sm text-gray-400'>Join our 100% free creative network</p>
 
                     <div className='sign-up-google'>
-                        <div className='border-gray-300 border-2 w-96 flex justify-center p-2 rounded-md mt-4 font-bold cursor-pointer'>
-                            <FcGoogle size={24} className='mr-1.5' /> Sign up with Google
-                        </div>
+                        <div className='border-gray-300 border-2 flex justify-center p-2 rounded-md mt-4 font-bold cursor-pointer'>
+                            <FcGoogle size={24} className='mr-1.5' /> Sign up with Google</div>
                     </div>
 
                     <form className='flex flex-col mt-4' onSubmit={handleClick}>
                         {/* Name */}
                         <label htmlFor="name" className='font-semibold text-sm mt-2.5'>Name*</label>
-                        <input type="text" id='name' name='name' value={validation.name} onChange={handleChange} className='w-96 border-2 rounded-md border-gray-300 p-1 pl-2' />
+                        <input type="text" id='name' name='name' value={validation.name} onChange={handleChange} className='border-2 rounded-md border-gray-300 p-1 pl-2' />
                         {touched.name && validation.name.trim() === '' && <p className='text-sm mt-1 text-red-500'>Field required</p>}
                         {touched.name && validation.name.trim() !== '' && !regexValidation.name && <p className='text-sm mt-1 text-red-500'>Enter valid full name (e.g., John Doe)</p>}
 
                         {/* Mobile */}
                         <label htmlFor="mobile" className='font-semibold text-sm mt-2.5'>Mobile*</label>
-                        <input type="number" id='mobile' name='mobile' value={validation.mobile} onChange={handleChange} className='w-96 border-2 rounded-md border-gray-300 p-1 pl-2 no-spinner' />
+                        <input type="number" id='mobile' name='mobile' value={validation.mobile} onChange={handleChange} className='border-2 rounded-md border-gray-300 p-1 pl-2 no-spinner' />
                         {touched.mobile && validation.mobile.trim() === '' && <p className='text-sm mt-1 text-red-500'>Field required</p>}
                         {touched.mobile && validation.mobile.trim() !== '' && !regexValidation.mobile && <p className='text-sm mt-1 text-red-500'>Enter valid 10-digit mobile number</p>}
 
                         {/* Email */}
                         <label htmlFor="email" className='font-semibold text-sm mt-2.5'>Email*</label>
-                        <input type="email" id='email' name='email' value={validation.email} onChange={handleChange} className='w-96 border-2 rounded-md border-gray-300 p-1 pl-2' />
+                        <input type="email" id='email' name='email' value={validation.email} onChange={handleChange} className='border-2 rounded-md border-gray-300 p-1 pl-2' />
                         {touched.email && validation.email.trim() === '' && <p className='text-sm mt-1 text-red-500'>Field required</p>}
                         {touched.email && validation.email.trim() !== '' && !regexValidation.email && <p className='text-sm mt-1 text-red-500'>Enter a valid email</p>}
                         {existOrNot && <p className='text-sm mt-1 text-red-500'>Email Already exist</p>}
 
                         {/* Password */}
                         <label htmlFor="password" className='font-semibold text-sm mt-2.5'>Password*</label>
-                        <input type="password" id='password' name='password' value={validation.password} onChange={handleChange} className='w-96 border-2 rounded-md border-gray-300 p-1 pl-2' />
+                        <input type="password" id='password' name='password' value={validation.password} onChange={handleChange} className='border-2 rounded-md border-gray-300 p-1 pl-2' />
                         {touched.password && validation.password.trim() === '' && <p className='text-sm mt-1 text-red-500'>Field required</p>}
                         {touched.password && validation.password.trim() !== '' && !regexValidation.password && <p className='text-sm mt-1 text-red-500'>Password must be at least 6 characters</p>}
 
-                        <button type='submit' className='w-96 bg-black text-white mt-5 p-2.5 rounded-md cursor-pointer'>Sign up</button>
+                        <button type='submit' className='bg-black text-white mt-5 p-2.5 rounded-md cursor-pointer'>Sign up</button>
                     </form>
 
-                    <div className='text-center w-96 mt-2.5'>
+                    <div className='text-center mt-2.5'>
                         <p className='text-gray-400 text-sm'>
                             Already Have account?
                             <span className='text-black'> <Link to='/log-in'>Log In</Link></span>

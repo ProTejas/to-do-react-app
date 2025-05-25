@@ -5,7 +5,7 @@ import App from './App.jsx'
 import { BrowserRouter, Route, Routes } from 'react-router'
 import SignUp from './components/sign-up/SignUp.jsx'
 import Login from './components/log-in/Login.jsx'
-import ToDoInputs from './components/to-inputs/ToDoInputs.jsx'
+import ToDoInputs from './components/to-do-inputs/ToDoInputs.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

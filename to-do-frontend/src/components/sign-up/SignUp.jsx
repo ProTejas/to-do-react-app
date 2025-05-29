@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { data, Link, useNavigate } from 'react-router-dom'; // FIX: should be from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
 import { FcGoogle } from "react-icons/fc";
-// import ragistrationImg from '../../assets/ragistration-img.jpg';
-import '../sign-up/sign-up.css';
+import '../sign-up/sign-up.css'; // Optional: consider using only Tailwind
 
 function SignUp() {
     const [validation, setValidation] = useState({
@@ -20,7 +18,8 @@ function SignUp() {
         password: false,
     });
 
-    const [existOrNot, setExistenace] = useState(false);
+    const [emailExists, setEmailExists] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const [regexValidation, setRegexValidation] = useState({
         name: true,
@@ -29,49 +28,45 @@ function SignUp() {
         password: true,
     });
 
-    function handleChange(e) {
+    const regexMap = {
+        name: /^[A-Za-z]+ [A-Za-z]+$/,
+        mobile: /^[0-9]{10}$/,
+        email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+    };
+
+    const handleChange = (e) => {
         const { name, value } = e.target;
 
         setValidation((prev) => ({ ...prev, [name]: value }));
         setTouched((prev) => ({ ...prev, [name]: true }));
 
-        // Regex checks
-        if (name === 'name') {
-            const nameRegex = /^[A-Za-z]+ [A-Za-z]+$/;
-            setRegexValidation((prev) => ({
-                ...prev,
-                name: value.trim() === '' ? true : nameRegex.test(value),
-            }));
-        }
+        if (name === 'email') setEmailExists(false); // reset existence state
 
-        if (name === 'mobile') {
-            const mobileRegex = /^[0-9]{10}$/;
-            setRegexValidation((prev) => ({
-                ...prev,
-                mobile: value.trim() === '' ? true : mobileRegex.test(value),
-            }));
-        }
+        setRegexValidation((prev) => ({
+            ...prev,
+            [name]:
+                value.trim() === ''
+                    ? true
+                    : name === 'password'
+                        ? value.length >= 6
+                        : regexMap[name]
+                            ? regexMap[name].test(value)
+                            : true,
+        }));
+    };
 
-        if (name === 'email') {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            setRegexValidation((prev) => ({
-                ...prev,
-                email: value.trim() === '' ? true : emailRegex.test(value),
-            }));
-        }
-
-        if (name === 'password') {
-            setRegexValidation((prev) => ({
-                ...prev,
-                password: value.trim() === '' ? true : value.length >= 6,
-            }));
-        }
-    }
+    const isFormValid =
+        validation.name &&
+        validation.mobile &&
+        validation.email &&
+        validation.password &&
+        Object.values(regexValidation).every(Boolean);
 
     const navigate = useNavigate();
 
-    async function handleClick(e) {
-        e.preventDefault(); // prevent page reload
+    const handleClick = async (e) => {
+        e.preventDefault();
+        setLoading(true);
 
         try {
             const response = await fetch('http://localhost:8000/api/users', {
@@ -86,21 +81,20 @@ function SignUp() {
 
             if (response.ok) {
                 console.log('Registration successful:', data);
-                navigate('/log-in')
-                // redirect or show success message here
+                navigate('/log-in');
             } else {
                 console.log('Server error:', data.msg || 'Something went wrong');
-                if (data.msg == "Email already exists") {
-                    console.log("true");
-
-                    setExistenace(true);
+                if (data.msg === "Email already exists") {
+                    setEmailExists(true);
                 }
             }
 
         } catch (err) {
             console.log('Error:', err);
+        } finally {
+            setLoading(false);
         }
-    }
+    };
 
     return (
         <div className='h-[100vh] flex justify-center items-center'>
@@ -110,42 +104,79 @@ function SignUp() {
                     <p className='text-sm text-gray-400'>Join our 100% free creative network</p>
 
                     <div className='sign-up-google'>
-                        <div className='border-gray-300 border-2 flex justify-center p-2 rounded-md mt-4 font-bold cursor-pointer'>
-                            <FcGoogle size={24} className='mr-1.5' /> Sign up with Google</div>
+                        <button type="button" className='border-gray-300 border-2 flex justify-center p-2 rounded-md mt-4 font-bold cursor-pointer w-full'>
+                            <FcGoogle size={24} className='mr-1.5' /> Sign up with Google
+                        </button>
                     </div>
 
                     <form className='flex flex-col mt-4' onSubmit={handleClick}>
                         {/* Name */}
                         <label htmlFor="name" className='font-semibold text-sm mt-2.5'>Name*</label>
-                        <input type="text" id='name' name='name' value={validation.name} onChange={handleChange} className='border-2 rounded-md border-gray-300 p-1 pl-2' />
+                        <input
+                            type="text"
+                            id='name'
+                            name='name'
+                            value={validation.name}
+                            onChange={handleChange}
+                            className='border-2 rounded-md border-gray-300 p-1 pl-2'
+                        />
                         {touched.name && validation.name.trim() === '' && <p className='text-sm mt-1 text-red-500'>Field required</p>}
                         {touched.name && validation.name.trim() !== '' && !regexValidation.name && <p className='text-sm mt-1 text-red-500'>Enter valid full name (e.g., John Doe)</p>}
 
                         {/* Mobile */}
                         <label htmlFor="mobile" className='font-semibold text-sm mt-2.5'>Mobile*</label>
-                        <input type="number" id='mobile' name='mobile' value={validation.mobile} onChange={handleChange} className='border-2 rounded-md border-gray-300 p-1 pl-2 no-spinner' />
+                        <input
+                            type="text"
+                            id='mobile'
+                            name='mobile'
+                            inputMode="numeric"
+                            pattern="[0-9]*"
+                            value={validation.mobile}
+                            onChange={handleChange}
+                            className='border-2 rounded-md border-gray-300 p-1 pl-2'
+                        />
                         {touched.mobile && validation.mobile.trim() === '' && <p className='text-sm mt-1 text-red-500'>Field required</p>}
                         {touched.mobile && validation.mobile.trim() !== '' && !regexValidation.mobile && <p className='text-sm mt-1 text-red-500'>Enter valid 10-digit mobile number</p>}
 
                         {/* Email */}
                         <label htmlFor="email" className='font-semibold text-sm mt-2.5'>Email*</label>
-                        <input type="email" id='email' name='email' value={validation.email} onChange={handleChange} className='border-2 rounded-md border-gray-300 p-1 pl-2' />
+                        <input
+                            type="email"
+                            id='email'
+                            name='email'
+                            value={validation.email}
+                            onChange={handleChange}
+                            className='border-2 rounded-md border-gray-300 p-1 pl-2'
+                        />
                         {touched.email && validation.email.trim() === '' && <p className='text-sm mt-1 text-red-500'>Field required</p>}
                         {touched.email && validation.email.trim() !== '' && !regexValidation.email && <p className='text-sm mt-1 text-red-500'>Enter a valid email</p>}
-                        {existOrNot && <p className='text-sm mt-1 text-red-500'>Email Already exist</p>}
+                        {emailExists && <p className='text-sm mt-1 text-red-500'>Email already exists</p>}
 
                         {/* Password */}
                         <label htmlFor="password" className='font-semibold text-sm mt-2.5'>Password*</label>
-                        <input type="password" id='password' name='password' value={validation.password} onChange={handleChange} className='border-2 rounded-md border-gray-300 p-1 pl-2' />
+                        <input
+                            type="password"
+                            id='password'
+                            name='password'
+                            value={validation.password}
+                            onChange={handleChange}
+                            className='border-2 rounded-md border-gray-300 p-1 pl-2'
+                        />
                         {touched.password && validation.password.trim() === '' && <p className='text-sm mt-1 text-red-500'>Field required</p>}
                         {touched.password && validation.password.trim() !== '' && !regexValidation.password && <p className='text-sm mt-1 text-red-500'>Password must be at least 6 characters</p>}
 
-                        <button type='submit' className='bg-black text-white mt-5 p-2.5 rounded-md cursor-pointer'>Sign up</button>
+                        <button
+                            type='submit'
+                            className='bg-black text-white mt-5 p-2.5 rounded-md cursor-pointer disabled:opacity-50'
+                            disabled={!isFormValid || loading}
+                        >
+                            {loading ? 'Signing up...' : 'Sign up'}
+                        </button>
                     </form>
 
                     <div className='text-center mt-2.5'>
                         <p className='text-gray-400 text-sm'>
-                            Already Have account?
+                            Already have an account?
                             <span className='text-black'> <Link to='/log-in'>Log In</Link></span>
                         </p>
                     </div>
